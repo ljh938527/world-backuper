@@ -4,9 +4,14 @@ def create_config() -> dict:
     config_data = {
         "backup": {
             "7z_path": "",
-            "source_dir": "server/worlds",
-            "output_dir": "server/backup",
+            "source_dir": "./server/worlds",
+            "output_dir": "./server/backup",
             "archive_name": "world"
+        },
+        "auto": {
+            "keep_days": 7,  # 保留天数
+            "backup_interval_minutes": 60,
+            "log_dir": "logs"
         }
     }
     with open('config.toml', 'w', encoding='utf-8') as f:

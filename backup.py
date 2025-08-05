@@ -1,6 +1,12 @@
 import os
 import subprocess
 from datetime import datetime
+from config import create_config, read_config
+
+try:
+    conf = read_config()
+except FileNotFoundError:
+    conf = create_config()
 
 def find_7z() -> str | None:
     """寻找 7z 位置"""
@@ -14,11 +20,13 @@ def find_7z() -> str | None:
 
 def backup_world(quiet: bool = False) -> bool:
     """备份世界函数"""
-    source_dir = r".\server\worlds"
-    output_dir = r".\server\backup"
-    archive_name = 'world'
+    source_dir = conf["backup"]["source_dir"]
+    output_dir = conf["backup"]["output_dir"]
+    archive_name = conf["backup"]["archive_name"]
 
-    seven_zip = find_7z()  # 设置 7z 位置
+    seven_zip = conf["backup"]["7z_path"]  # 设置 7z 位置
+    if not seven_zip:
+        seven_zip = find_7z()
     if not seven_zip:
         return False
 
@@ -34,7 +42,7 @@ def backup_world(quiet: bool = False) -> bool:
         if quiet:
             subprocess.run([
                 seven_zip,
-                "a", "-t7z", "-mx9", "-ssw",
+                "a", "-t7z", "-mx9", "-ssw", "-bso0", "-bsp0",
                 output_file,
                 os.path.join(source_dir, "*")
             ], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
