@@ -10,6 +10,7 @@ A pytohn program for backuping up Minecraft archives or other folders.
 ### 如何使用它？
 
 - 1.克隆仓库： `git clone https://github.com/ljh938527/world-backuper.git`
-- 2.编辑配置文件： 先运行 `config.py`，再编辑 `config.toml`
-- 3.启动自动备份： `python main.py`
-- 4.手动执行备份： `python backup.py`
+- 2.安装库： `pip install -r requirements.txt`
+- 3.编辑配置文件： 先运行 `config.py`，再编辑 `config.toml`
+- 4.启动自动备份： `python main.py`
+- 5.手动执行备份： `python backup.py`
