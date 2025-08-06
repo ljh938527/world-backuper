@@ -2,7 +2,7 @@
 
 一个用于备份 Minecraft 存档 或其他文件夹的 python 程序。
 
-A pytohn program for backuping up Minecraft archives or other folders.
+A python program for backuping up Minecraft archives or other folders.
 
 ![python](https://img.shields.io/badge/Python-3.9+-blue?logo=python)
 ![apache](https://img.shields.io/badge/license-Apache-green?logo=apache)
