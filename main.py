@@ -3,10 +3,14 @@ import logging
 import os
 import glob
 from datetime import datetime, timedelta
-from backup import backup_world, conf
+
+from backup import backup_world, conf, validate_config
 
 class BackupHelper:
     def __init__(self):
+        # 检查配置文件
+        if not validate_config(conf):
+            return
         self.backup_dir = conf["backup"]["output_dir"]
         log_dir = conf["auto"]["log_dir"]
         os.makedirs(self.backup_dir, exist_ok=True)
@@ -74,7 +78,18 @@ class BackupHelper:
         console.setFormatter(formatter)
         logging.getLogger('').addHandler(console)
 
-        logging.info("自动备份守护进程启动")
+        # 检查配置文件
+        if not validate_config(conf):
+            print("错误！请检查配置文件 config.toml 的完整性")
+            return False
+
+        logging.info(r"                    _     _    _                _")
+        logging.info(r"__      _____  _ __| | __| |  | |__   __ _  ___| | ___   _ _ __   ___ _ __")
+        logging.info(r"\ \ /\ / / _ \| '__| |/ _` |  | '_ \ / _` |/ __| |/ / | | | '_ \ / _ \ '__|")
+        logging.info(r" \ V  V / (_) | |  | | (_| |  | |_) | (_| | (__|   <| |_| | |_) |  __/ |")
+        logging.info(r"  \_/\_/ \___/|_|  |_|\__,_|  |_.__/ \__,_|\___|_|\_\\__,_| .__/ \___|_|")
+        logging.info(r"                                                          |_|")
+        logging.info("自动备份守护进程已启动")
         logging.info(f"备份间隔时长: {self.interval} 分钟")
         logging.info(f"所有备份时间点: {', '.join(self.backup_times_list)}")
         logging.info(f"备份保留策略: 最近 {self.keep_days} 天")

@@ -1,7 +1,9 @@
 import os
 import subprocess
 from datetime import datetime
-from config import create_config, read_config
+from subprocess import CalledProcessError
+
+from config import create_config, read_config, validate_config
 
 try:
     conf = read_config()
@@ -20,10 +22,14 @@ def find_7z() -> str | None:
 
 def backup_world(quiet: bool = False) -> bool:
     """备份世界函数"""
+    # 检查配置文件
+    if not validate_config(conf, 0, 5):
+        print("错误！请检查配置文件 config.toml 的完整性")
+        return False
+    # 配置参数
     source_dir = conf["backup"]["source_dir"]
     output_dir = conf["backup"]["output_dir"]
     archive_name = conf["backup"]["archive_name"]
-
     seven_zip = conf["backup"]["7z_path"]  # 设置 7z 位置
     if not seven_zip:
         seven_zip = find_7z()
@@ -55,6 +61,9 @@ def backup_world(quiet: bool = False) -> bool:
             ], check=True)
             print(f"备份成功: {output_file}")
         return True
+    except CalledProcessError:
+        print(f"备份失败！请检查 {source_dir} 是否存在。")
+        return False
     except Exception as e:
         print(f"备份失败! 错误信息: {e}")
         return False
