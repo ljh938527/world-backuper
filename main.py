@@ -2,6 +2,7 @@ import time
 import logging
 import os
 import glob
+import threading
 from datetime import datetime, timedelta
 
 from backup import backup_world, conf, validate_config
@@ -99,9 +100,9 @@ class BackupHelper:
             while True:
                 now = datetime.now().strftime("%H:%M")
                 if now in self.backup_times_list:
-                    self.run_backup()
+                    threading.Thread(target=self.run_backup()).start()
                     # 避免同一分钟内重复执行
-                    time.sleep(61)
+                    time.sleep(60 - datetime.now().second)
                 time.sleep(30)  # 每30秒检查一次时间
         except KeyboardInterrupt:
             logging.info("已停止备份守护进程")
