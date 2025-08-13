@@ -66,6 +66,9 @@ def backup_world(quiet: bool = False) -> bool:
             print(f"备份成功: {output_file}")
         return True
     except CalledProcessError as e:
+        if e.returncode == 1:
+            print("警告：有一个或多个文件被程序锁定未被压缩")
+            return True
         print(f"进程调用错误: {e}")
         return False
     except Exception as e:
