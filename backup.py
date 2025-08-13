@@ -19,7 +19,6 @@ def find_7z() -> str | None:
         print("提示：未找到7z.exe，请在 www.7-zip.org 中安装 7-zip 到 C盘 或 从配置文件中添加您的 7zip 位置。")
         return None
 
-
 def backup_world(quiet: bool = False) -> bool:
     """备份世界函数"""
     # 检查配置文件
@@ -38,6 +37,11 @@ def backup_world(quiet: bool = False) -> bool:
 
     # 创建输出目录
     os.makedirs(output_dir, exist_ok=True)
+
+    # 检查源目录
+    if not os.path.exists(source_dir):
+        print(f"备份失败！请检查 {source_dir} 是否存在。")
+        return False
 
     # 生成带时间戳的文件名
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -61,8 +65,8 @@ def backup_world(quiet: bool = False) -> bool:
             ], check=True)
             print(f"备份成功: {output_file}")
         return True
-    except CalledProcessError:
-        print(f"备份失败！请检查 {source_dir} 是否存在。")
+    except CalledProcessError as e:
+        print(f"进程调用错误: {e}")
         return False
     except Exception as e:
         print(f"备份失败! 错误信息: {e}")

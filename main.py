@@ -82,7 +82,7 @@ class BackupHelper:
         # 检查配置文件
         if not validate_config(conf):
             print("错误！请检查配置文件 config.toml 的完整性")
-            return False
+            return
 
         logging.info(r"                    _     _    _                _")
         logging.info(r"__      _____  _ __| | __| |  | |__   __ _  ___| | ___   _ _ __   ___ _ __")
@@ -100,7 +100,7 @@ class BackupHelper:
             while True:
                 now = datetime.now().strftime("%H:%M")
                 if now in self.backup_times_list:
-                    threading.Thread(target=self.run_backup()).start()
+                    threading.Thread(target=self.run_backup).start()
                     # 避免同一分钟内重复执行
                     time.sleep(60 - datetime.now().second)
                 time.sleep(30)  # 每30秒检查一次时间
